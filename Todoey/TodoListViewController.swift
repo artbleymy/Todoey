@@ -12,9 +12,16 @@ class TotoListViewController: UITableViewController{
 
     var itemArray = ["Find Mike", "Buy Eggs", "Destroy Demogorgon"]
     
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        if let items = defaults.array(forKey: "ToDoListArray") as? [String]{
+            itemArray = items
+        }
+        
     }
     
     //MARK: - Table View Datasource
@@ -58,11 +65,12 @@ class TotoListViewController: UITableViewController{
         let actionAdd = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //when we add new item
             let newItem = textField.text!
-            print("Sucess add \(newItem)")
             if newItem != "" {
                 self.itemArray.append(newItem)
             }
-            print(self.itemArray)
+            
+            self.defaults.set(self.itemArray, forKey: "ToDoListArray")
+            
             self.tableView.reloadData()
             
         }
