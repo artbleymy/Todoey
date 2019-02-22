@@ -10,7 +10,7 @@ import UIKit
 
 class TotoListViewController: UITableViewController{
 
-    let itemArray = ["Find Mike", "Buy Eggs", "Destroy Demogorgon"]
+    var itemArray = ["Find Mike", "Buy Eggs", "Destroy Demogorgon"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +42,43 @@ class TotoListViewController: UITableViewController{
         
         
     }
-    
+    //MARK - Add new items
+    @IBAction func addButtonPressed(_ sender: Any) {
+        
+        let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
+        
+        var textField = UITextField()
+        //add text field
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Create New Item"
+            textField = alertTextField
+            
+        }
+        //add action
+        let actionAdd = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            //when we add new item
+            let newItem = textField.text!
+            print("Sucess add \(newItem)")
+            if newItem != "" {
+                self.itemArray.append(newItem)
+            }
+            print(self.itemArray)
+            self.tableView.reloadData()
+            
+        }
+        
+        //cancel action
+        alert.addAction(actionAdd)
+        let actionCancel = UIAlertAction(title: "Cancel", style: .default) { (action) in
+            //when we cancel adding
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(actionCancel)
+        
+        present(alert, animated: true, completion: nil)
+        
+        
+    }
     
 }
 
