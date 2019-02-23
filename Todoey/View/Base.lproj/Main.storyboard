@@ -9,16 +9,16 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Table View Controller-->
+        <!--Category View Controller-->
         <scene sceneID="zsQ-kq-hqK">
             <objects>
-                <tableViewController id="AbZ-Sh-H6q" sceneMemberID="viewController">
+                <tableViewController id="AbZ-Sh-H6q" customClass="CategoryViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="HGS-HU-jUY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="2al-UL-YvC">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CategoryCell" id="2al-UL-YvC">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2al-UL-YvC" id="OpQ-j8-zo4">
@@ -32,9 +32,16 @@
                             <outlet property="delegate" destination="AbZ-Sh-H6q" id="RmC-wR-j4Q"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="Dav-Gj-P2r"/>
+                    <navigationItem key="navigationItem" id="Dav-Gj-P2r">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="1RL-lD-Bya">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="addButtonPresses:" destination="AbZ-Sh-H6q" id="UnW-2A-lnL"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
-                        <segue destination="87m-XX-6GP" kind="show" id="O3a-al-uNj"/>
+                        <segue destination="87m-XX-6GP" kind="show" identifier="goToItems" id="O3a-al-uNj"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8wJ-KR-icT" userLabel="First Responder" sceneMemberID="firstResponder"/>
