@@ -194,8 +194,14 @@ class TodoListViewController: SwipeTableViewController{
 //MARK: - Search bar methods
 extension TodoListViewController: UISearchBarDelegate{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let text = searchBar.text!
+        if text.count > 0{
+            todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreate", ascending: false)
+            tableView.reloadData()
+        } else {
+            loadItems()
+        }
         
-        filterItems(for: searchBar.text!)
         DispatchQueue.main.async {
             searchBar.resignFirstResponder()
         }
@@ -204,26 +210,25 @@ extension TodoListViewController: UISearchBarDelegate{
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        filterItems(for: searchBar.text!)
-    }
-    
-    func filterItems(for text: String){
-        
-        if text.count == 0 {
+//        filterItems(for: searchBar.text!)
+        if searchText.count == 0 {
             loadItems()
             tableView.reloadData()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
         }
-        
-        
-        //filter in realtime
-//        if text.count > 0 {
-//            todoItems = todoItems?.filter("title CONTAINS[cd] %@", text).sorted(byKeyPath: "dateCreate", ascending: false)
-//        } else {
+    }
+    
+//    func filterItems(for text: String){
+//
+//        if text.count == 0 {
 //            loadItems()
+//            tableView.reloadData()
 //        }
 //
 //        tableView.reloadData()
-    }
+//    }
     
     
 }
