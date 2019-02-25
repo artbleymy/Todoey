@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        print("didFinishLaunchingWithOptions ")
 //        print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last! as String)
         //in finder use Cmd+Shift+G and paste path
-        print(Realm.Configuration.defaultConfiguration.fileURL)
+//        print(Realm.Configuration.defaultConfiguration.fileURL)
         //sample of object to add in realm
 //        let data = Data()
 //        data.name = "Stan"

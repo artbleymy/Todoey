@@ -8,9 +8,9 @@
 
 import UIKit
 import RealmSwift
-import SwipeCellKit
+import ChameleonFramework
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeTableViewController {
 
    
     let realm = try! Realm()
@@ -21,9 +21,9 @@ class CategoryViewController: UITableViewController {
         
         loadCategories()
         
-        tableView.rowHeight = 80.0
-        
     }
+    
+    
 
      @IBAction func addButtonPresses(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Add New Category", message: "", preferredStyle: .alert)
@@ -41,6 +41,9 @@ class CategoryViewController: UITableViewController {
             if text.count > 0 {
                 let newCategory = Category()
                 newCategory.name = text
+                if let colour = UIColor.randomFlat()?.hexValue() {
+                    newCategory.colour  = colour
+                }
                 self.save(category: newCategory)
                 self.tableView.reloadData()
             }
@@ -59,16 +62,16 @@ class CategoryViewController: UITableViewController {
     }
     
     //MARK: - TableView Datasource Methods
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! SwipeTableViewCell
-//        cell.delegate = self
-//        return cell
-//    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = UITableViewCell(style: .default, reuseIdentifier: "CategoryItemCell") as! SwipeTableViewCell
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell") as! SwipeTableViewCell
-        cell.delegate = self
+
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
         cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No categories"
+        let colour = UIColor(hexString:categoryArray?[indexPath.row].colour ??  "7CB2FA")
+        cell.backgroundColor = colour
+        cell.textLabel?.textColor = UIColor(contrastingBlackOrWhiteColorOn: colour, isFlat: true)
+        
         
         return cell
     }
@@ -110,38 +113,21 @@ class CategoryViewController: UITableViewController {
         tableView.reloadData()
     }
     
-}
-
-//MARK: Swipe Cell Delegate Methods
-extension CategoryViewController: SwipeTableViewCellDelegate{
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right else { return nil }
+    override func updateModel(at indexPath: IndexPath) {
         
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            // handle action by updating model with deletion
-//            print("indexPath \(indexPath.row) ")
-            if let category = self.categoryArray?[indexPath.row]{
-                do {
-                    try self.realm.write {
-                        self.realm.delete(category)
-//                        self.tableView.reloadData()
-                    }
-                } catch {
-                    print("Error deleting category \(error)")
+        super.updateModel(at: indexPath)
+        
+        if let category = self.categoryArray?[indexPath.row]{
+            do {
+                try self.realm.write {
+                    self.realm.delete(category)
                 }
+            } catch {
+                print("Error deleting category \(error)")
             }
         }
-        
-        // customize the action appearance
-        deleteAction.image = UIImage(named: "delete-icon")
-        
-        return [deleteAction]
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
-        var options = SwipeOptions()
-        options.expansionStyle = .destructive
-        return options
     }
     
 }
+
+
