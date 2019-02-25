@@ -61,6 +61,27 @@ class TodoListViewController: UITableViewController{
         tableView.deselectRow(at: indexPath, animated: true)
         
     }
+    
+    //в этом месте удаление сделано без использований сторонних cocoapods
+    //deleting without third-party cocoapods
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        ///remove anything
+        let remove = UITableViewRowAction(style: .normal, title: "Delete") { action, index in
+            if let item = self.todoItems?[indexPath.row] {
+                do {
+                    try self.realm.write {
+                        self.realm.delete(item)
+                        self.loadItems()
+                    }
+                } catch {
+                    print("Error deleting item \(error)")
+                }
+            }
+        }
+        remove.backgroundColor = .red
+        return [remove]
+    }
+    
     //MARK - Add new items
     @IBAction func addButtonPressed(_ sender: Any) {
         
@@ -111,16 +132,12 @@ class TodoListViewController: UITableViewController{
     
     func loadItems(){
         
-        todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
+        todoItems = selectedCategory?.items.sorted(byKeyPath: "dateCreate", ascending: false)
         tableView.reloadData()
     }
     
-    
-
-
-    
-    
 }
+
 //MARK: - Search bar methods
 extension TodoListViewController: UISearchBarDelegate{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
